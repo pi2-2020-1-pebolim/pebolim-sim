@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace PUDM.DataObjects
 {
     [Serializable]
-    class DesiredState
+    public class DesiredState
     {
         public int laneID;
         public float position;

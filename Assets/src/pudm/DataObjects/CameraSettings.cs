@@ -8,9 +8,14 @@ using UnityEngine.Animations;
 namespace PUDM.DataObjects
 {
     [Serializable]
-    class CameraSettings
+    public class CameraSettings
     {
         public int framerate;
         public Tuple<int, int> resolution;
+
+        public CameraSettings(int framerate, Tuple<int, int> resolution) {
+            this.framerate = framerate;
+            this.resolution = resolution;
+        }
     }
 }

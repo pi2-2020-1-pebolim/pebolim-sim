@@ -8,8 +8,16 @@ using UnityEngine.Animations;
 namespace PUDM.DataObjects
 {
     [Serializable]
-    class Camera
+    public class Camera
     {
         public string image;
+
+        public Camera(byte[] image) {
+            this.image = Convert.ToBase64String(image);
+        }
+
+        public Camera(string base64Image) {
+            this.image = base64Image;
+        }
     }
 }

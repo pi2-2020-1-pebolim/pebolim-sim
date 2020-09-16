@@ -8,11 +8,15 @@ using System.Threading.Tasks;
 
 namespace PUDM.Events
 {
-    class ActionEvent: PUDMEvent
+    public class ActionEvent: PUDMEvent
     {
 
-         public override string eventType { get { return "register"; } }
+       public override string eventType { get { return "register"; } }
 
         public List<DesiredState> desiredState;
+
+        public ActionEvent() : base(){
+            
+        }
     }
 }

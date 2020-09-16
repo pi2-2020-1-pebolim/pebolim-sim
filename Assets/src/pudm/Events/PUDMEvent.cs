@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace PUDM.Events
@@ -9,13 +12,19 @@ namespace PUDM.Events
     public abstract class PUDMEvent
     {
 
-        public int timestamp;
+        public long timestamp;
         public const int version = 1;
         public abstract string eventType { get; }
 
-        public string ToJson() {
-            // this will serialize all public attributes to json
-            return JsonUtility.ToJson(this); 
+        protected PUDMEvent() {
+
+            var now = (DateTimeOffset)DateTime.UtcNow;
+            timestamp = now.ToUnixTimeSeconds();
+        }
+
+        public virtual string ToJson()
+        {
+            return JsonConvert.SerializeObject(this);
         }
 
     }

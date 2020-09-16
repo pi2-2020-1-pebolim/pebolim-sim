@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PUDM.DataObjects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,12 +8,17 @@ using System.Threading.Tasks;
 namespace PUDM.Events
 {
     [Serializable]
-    class StatusUpdateEvent : PUDM.Events.PUDMEvent
+    public class StatusUpdateEvent : PUDM.Events.PUDMEvent
     {
         public override string eventType { get { return "status_update"; } }
 
-        PUDM.DataObjects.Camera camera;
-        List<PUDM.DataObjects.Lane> lanes;
+        public PUDM.DataObjects.Camera camera;
+        public List<PUDM.DataObjects.Lane> lanes;
+
+        public StatusUpdateEvent(Camera camera, List<Lane> lanes) : base(){
+            this.camera = camera;
+            this.lanes = lanes;
+        }
 
     }
 }
