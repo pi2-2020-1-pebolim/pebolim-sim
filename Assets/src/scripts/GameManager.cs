@@ -15,7 +15,6 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get => instance; }
 
     private PUDMClient pudmClient;
-    private Task connectTask;
 
     [SerializeField]
     string hostUri;
@@ -44,28 +43,17 @@ public class GameManager : MonoBehaviour
         foreach (var lane in laneGameObjects) {
             lanesState.Add(new Lane(initialID++, getYfromReferencePoint(lane), lane));
         }
-
-        connectTask = this.pudmClient.Connect();
     }
     
     private async void OnDestroy()
     {
         Debug.Log("Destroying GameManager and pudmClient");
-        this.pudmClient.Disconnect();
+        this.pudmClient.End();
     }
     
     async void Update() {
         
         updateLaneInformation();
-
-        if (this.pudmClient.Connected == false)
-        {
-            await this.connectTask;
-        }
-        else
-        {
-            await this.pudmClient.PublishQueue();
-        }
     }
 
     void updateLaneInformation() { }
