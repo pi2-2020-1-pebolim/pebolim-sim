@@ -14,7 +14,7 @@ public class JsonGenerate : MonoBehaviour
         {
             Dictionary<string, int> temp = new Dictionary<string, int>();
             temp.Add("rotacao", Random.Range(0, 361));
-            temp.Add("movimento", Random.Range(-7, 7));
+            temp.Add("movimento", Random.Range(-400, 400));
             engine.Add(temp);
             this.json.Add("Motor"+(i+1), engine[i]);
         }
