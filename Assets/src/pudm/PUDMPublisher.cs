@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using PUDM.Events;
 using System;
 using System.Collections.Concurrent;
@@ -68,21 +68,22 @@ namespace Assets.src.pudm
             webSocket = new WebSocket(this.hostUri);
 
             webSocket.OnOpen += async (sender, e) => {
-                Debug.Log("SocketIO Connected");
+                Debug.Log("SocketIO Connected " + sender.ToString() + " " + e.ToString());
                 Hail();
             };
 
             webSocket.OnClose += async (sender, e) => {
-                Debug.LogWarning("SocketIO Disconnected");
+                Debug.LogWarning("SocketIO Disconnected " + sender.ToString() + " " + e.Reason);
+
+                if (this.acceptEvents) {
+                    Connect();
+                }
             };
 
             webSocket.OnError += async (sender, e) => {
-                Debug.LogError(e);
-            };
-
-            webSocket.OnMessage += async (sender, e) => {
-
-                Debug.Log("Message: " + e.Data);
+                Debug.LogError(sender);
+                Debug.LogError(e.Exception);
+                Debug.LogError(e.Message);
             };
 
             Debug.Log("SocketIO Starting connection");
