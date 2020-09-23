@@ -40,26 +40,26 @@ public class MotorMove : MonoBehaviour
         {
             float movement = calculateLimit(gameObject.transform.position.z, decisionServerScript.json["Motor1"]["movimento"], limitTranslateRod1);
             float rotacao = decisionServerScript.json["Motor1"]["rotacao"];
-            transform.Translate(0, movement, 0);
+            transform.Translate(0, movement * Time.deltaTime, 0);
             // transform.Rotate(0, 0, 0);
             transform.RotateAround(gameObject.transform.position, Vector3.forward, rotacao * Time.deltaTime);
         } else if (gameObject.name == "Rod2")
         {
             float movement = calculateLimit(gameObject.transform.position.z, decisionServerScript.json["Motor2"]["movimento"], limitTranslateRod2);
             float rotacao = decisionServerScript.json["Motor2"]["rotacao"];
-            transform.Translate(0, movement, 0);
+            transform.Translate(0, movement * Time.deltaTime, 0);
             transform.RotateAround(gameObject.transform.position, Vector3.forward, rotacao * Time.deltaTime);
         } else if (gameObject.name == "Rod4")
         {
             float movement = calculateLimit(gameObject.transform.position.z, decisionServerScript.json["Motor3"]["movimento"], limitTranslateRod4);
             float rotacao = decisionServerScript.json["Motor3"]["rotacao"];
-            transform.Translate(0, movement, 0);
-            transform.RotateAround(gameObject.transform.position, Vector3.forward, rotacao * Time.deltaTime);
+            transform.Translate(0, movement * Time.deltaTime, 0);
+            transform.RotateAround(gameObject.transform.position, Vector3.forward, rotacao);
         } else if (gameObject.name == "Rod6")
         {
             float movement = calculateLimit(gameObject.transform.position.z, decisionServerScript.json["Motor4"]["movimento"], limitTranslateRod6);
             float rotacao = decisionServerScript.json["Motor4"]["rotacao"];
-            transform.Translate(0, movement, 0);
+            transform.Translate(0, movement * Time.deltaTime, 0);
             transform.RotateAround(gameObject.transform.position, Vector3.forward, rotacao * Time.deltaTime);
         }
     }

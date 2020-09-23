@@ -13,8 +13,8 @@ public class JsonGenerate : MonoBehaviour
         for (int i = 0; i < 4; i++)
         {
             Dictionary<string, int> temp = new Dictionary<string, int>();
-            temp.Add("rotacao", Random.Range(0, 361));
-            temp.Add("movimento", Random.Range(-400, 400));
+            temp.Add("rotacao", Random.Range(-10000, 10000));
+            temp.Add("movimento", Random.Range(-10000, 10000));
             engine.Add(temp);
             this.json.Add("Motor"+(i+1), engine[i]);
         }
