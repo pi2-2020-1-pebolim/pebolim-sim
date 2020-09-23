@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using PUDM.Events;
 using System;
 using System.Collections.Concurrent;
@@ -17,6 +17,7 @@ namespace Assets.src.pudm
         private readonly ConcurrentQueue<PUDMEvent> evtQueue;
         private Thread jobThread;
         private bool acceptEvents;
+        private const int maxEvents = 180;
 
         WebSocket webSocket;
 
@@ -34,8 +35,13 @@ namespace Assets.src.pudm
         }
 
         public void Publish(PUDMEvent evt) {
-            if (acceptEvents)
+            if (acceptEvents) {
                 evtQueue.Enqueue(evt);
+
+                if (evtQueue.Count > maxEvents) {
+                    evtQueue.TryDequeue(out _);
+                }
+            }
         }
 
         public void Stop() {
@@ -100,9 +106,9 @@ namespace Assets.src.pudm
         }
 
         private void Emit(PUDMEvent evt) {
+          
             var packet = MakePacket(evt);
-
-            Debug.Log(packet);
+            //Debug.Log(packet);
             this.webSocket.Send(packet);
         }
 
