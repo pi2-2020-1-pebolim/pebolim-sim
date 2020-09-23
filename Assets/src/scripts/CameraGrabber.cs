@@ -54,7 +54,7 @@ public class CameraGrabber : MonoBehaviour
 
             RenderTexture.active = defaultRenderTexture;
             
-            byte[] bytes = screenShot.EncodeToPNG();
+            byte[] bytes = screenShot.EncodeToJPG();
             
             Destroy(screenShot);
             
