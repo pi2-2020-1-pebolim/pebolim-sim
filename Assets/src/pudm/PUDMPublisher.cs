@@ -3,7 +3,9 @@ using PUDM.Events;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,19 +16,17 @@ namespace Assets.src.pudm
 {
     class PUDMPublisher
     {
-        private readonly ConcurrentQueue<PUDMEvent> evtQueue;
+        private readonly BlockingCollection<PUDMEvent> evtQueue;
         private Thread jobThread;
         private bool acceptEvents;
         private const int maxEvents = 180;
-
-        WebSocket webSocket;
-
+        
         string hostUri;
 
-        public PUDMPublisher(string hostUri) { 
+        public PUDMPublisher(string hostUri) {
 
-            this.hostUri = "ws://" + hostUri + "/socket.io/?EIO=2&transport=websocket";
-            this.evtQueue = new ConcurrentQueue<PUDMEvent>();
+            this.hostUri = "http://" + hostUri + "/api/";
+            this.evtQueue = new BlockingCollection<PUDMEvent>();
 
             this.acceptEvents = true;
 
@@ -36,87 +36,67 @@ namespace Assets.src.pudm
 
         public void Publish(PUDMEvent evt) {
             if (acceptEvents) {
-                evtQueue.Enqueue(evt);
+                evtQueue.Add(evt);
+
+                Debug.Log("Added evt to queue");
 
                 if (evtQueue.Count > maxEvents) {
-                    evtQueue.TryDequeue(out _);
+              //      evtQueue.TryDequeue(out _);
                 }
             }
         }
 
         public void Stop() {
-            this.acceptEvents = false;           
-            this.webSocket.Close(CloseStatusCode.Normal, "Client shutting down");
 
+            this.acceptEvents = false;
 
-            while (evtQueue.TryDequeue(out _)) {}
-
+            evtQueue.CompleteAdding();
+            // empty the job queue before aborting thread
+            //while (evtQueue.TryDequeue(out _)) {}
             jobThread.Abort();
-            
-            this.webSocket = null;
         }
 
-        private async void Run() {
+        private void Run() {
 
-            this.Connect();
+           Debug.Log("Starting Publisher Loop");
 
+            // TODO: non-busy waiting
            while (acceptEvents) {
-                PUDMEvent evt;
+                
+                foreach (var evt in evtQueue.GetConsumingEnumerable()) { 
 
-                while (evtQueue.TryDequeue(out evt)) {
-                    Emit(evt);
+                    Debug.Log("Queue at: " + evtQueue.Count + "/" + maxEvents);
+                   
+                    try {
+                        Emit(evt);
+                    }catch (Exception e) {
+                        Debug.LogException(e);
+                    }
                 }
-            }
-        }
-
-        private void Connect() {
-
-            webSocket = new WebSocket(this.hostUri);
-
-            webSocket.OnOpen += async (sender, e) => {
-                Debug.Log("SocketIO Connected " + sender.ToString() + " " + e.ToString());
-                Hail();
-            };
-
-            webSocket.OnClose += async (sender, e) => {
-                Debug.LogWarning("SocketIO Disconnected " + sender.ToString() + " " + e.Reason);
-
-                if (this.acceptEvents) {
-                    Connect();
-                }
-            };
-
-            webSocket.OnError += async (sender, e) => {
-                Debug.LogError(sender);
-                Debug.LogError(e.Exception);
-                Debug.LogError(e.Message);
-            };
-
-            Debug.Log("SocketIO Starting connection");
-            webSocket.Connect();
-        }
-
-        private void Hail() {
-            var regEvent = new PUDM.Events.RegisterEvent(
-                new PUDM.DataObjects.FieldDefinition(100, 100),
-                new PUDM.DataObjects.CameraSettings(30, new Tuple<int, int>(300, 300))
-            );
-
-            Publish(regEvent);
+           }
         }
 
         private void Emit(PUDMEvent evt) {
-          
-            var packet = MakePacket(evt);
-            //Debug.Log(packet);
-            this.webSocket.Send(packet);
-        }
 
-        private string MakePacket(PUDMEvent evt) {
-            var packet = new[] { evt.eventType, evt.ToJson()};
-            var packetJson = JsonConvert.SerializeObject(packet);
+            // maps the endpoint to the eventType on the server
+            var endpoint = hostUri + evt.eventType;
 
-            return "42" + packetJson;
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create(endpoint);
+            httpWebRequest.ContentType = "application/json";
+            httpWebRequest.Method = "POST";
+
+            using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream())) {
+            
+                string json = evt.ToJson();
+                //Debug.Log(json);
+                streamWriter.Write(json);
+            }
+
+            var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream())) {
+                var result = streamReader.ReadToEnd();
+                Debug.Log(result);
+            }
         }
 
     }

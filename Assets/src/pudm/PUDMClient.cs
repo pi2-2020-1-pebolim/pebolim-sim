@@ -17,12 +17,14 @@ namespace PUDM
 {
     public class PUDMClient
     {
-        string hostUri;
-        PUDMPublisher publisher;
+        private PUDMPublisher publisher;
+        private PUDMConsumer consumer;
 
         public PUDMClient(string hostUri) {
             publisher = new PUDMPublisher(hostUri);
+            consumer = new PUDMConsumer(hostUri);
 
+            Hail();
         }
 
         public void End()
@@ -34,6 +36,15 @@ namespace PUDM
         public void Publish(PUDMEvent evt)
         {
             publisher.Publish(evt);
+        }
+
+        private void Hail() {
+            var regEvent = new PUDM.Events.RegisterEvent(
+                new PUDM.DataObjects.FieldDefinition(100, 100),
+                new PUDM.DataObjects.CameraSettings(30, new Tuple<int, int>(300, 300))
+            );
+
+            Publish(regEvent);
         }
 
         public void SendUpdate(byte[] cameraImage, List<Lane> currentLanesState) {
