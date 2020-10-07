@@ -47,7 +47,7 @@ namespace PUDM
             Publish(regEvent);
         }
 
-        public void SendUpdate(byte[] cameraImage, List<Lane> currentLanesState) {
+        public void SendUpdate(byte[] cameraImage, List<LaneDefinition> currentLanesState) {
 
             var updateEvent = new StatusUpdateEvent(new DataObjects.Camera(cameraImage), currentLanesState);
             Publish(updateEvent);

@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     List<GameObject> laneGameObjects;
 
-    List<PUDM.DataObjects.Lane> lanesState;
+    List<PUDM.DataObjects.LaneDefinition> lanesState;
     
     async void Start()
     {
@@ -38,9 +38,9 @@ public class GameManager : MonoBehaviour
         this.pudmClient = new PUDMClient(this.hostUri);
         
         var initialID = 0;
-        lanesState = new List<Lane>();
+        lanesState = new List<LaneDefinition>();
         foreach (var lane in laneGameObjects) {
-            lanesState.Add(new Lane(initialID++, getYfromReferencePoint(lane), lane));
+            lanesState.Add(new LaneDefinition(initialID++, getYfromReferencePoint(lane), lane));
         }
     }
     

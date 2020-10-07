@@ -10,6 +10,7 @@ namespace PUDM.DataObjects
     public class FieldDefinition
     {
         public Tuple<float, float> dimensions;
+        public List<LaneDefinition> lanes;
 
         public FieldDefinition(float width, float length) {
             dimensions = new Tuple<float, float>(width, length);
