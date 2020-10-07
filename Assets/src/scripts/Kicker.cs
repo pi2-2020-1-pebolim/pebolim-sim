@@ -5,40 +5,35 @@ using UnityEngine;
 public class Kicker : MonoBehaviour
 {
     [SerializeField]
-    GameObject ball;
+    GameObject rotationProviderObj;
 
-    [SerializeField]
-    ConstantRotation rotationProvider;
+    IRotationProvider rotationProvider;
 
     public float impulseAmount;
 
+    private void Start() {
+        rotationProvider = rotationProviderObj.GetComponent<IRotationProvider>();
+    }
+
     void OnCollisionEnter(Collision collision) {
 
-        if (collision.gameObject == ball) {
+        Debug.DrawLine(collision.transform.position, (collision.transform.position + collision.impulse), Color.red, 3);
+        Debug.DrawLine(collision.transform.position, transform.position, Color.cyan, 3);
 
-            var incomingVector = collision.rigidbody.velocity;
+        if (rotationProvider.IsKicking()) { 
 
-            Debug.DrawLine(collision.transform.position, (collision.transform.position + collision.impulse), Color.red, 3);
-            Debug.DrawLine(collision.transform.position, (collision.transform.position + (collision.impulse * -1)), Color.yellow, 3);
-            Debug.DrawLine(collision.transform.position, transform.position, Color.cyan, 3);
+            var extraImpulse = collision.impulse * impulseAmount;
+            Debug.DrawLine(collision.transform.position, (collision.transform.position + extraImpulse), Color.yellow, 3);
+            collision.rigidbody.AddForce(extraImpulse);
 
-            // if ballDirection is negative, the collided object is coming from the front (on x)
-            var ballDirection = Mathf.Sign(this.transform.position.x - collision.transform.position.x);
+        } else {
 
-            // if rotation is positive, we are rotating from left to right (on x)
-            var rotationDirecton = Mathf.Sign(rotationProvider.GetLastRotationStep());
+            var force = new Vector3(0, -1000, 0);
+            collision.rigidbody.AddForce(force);
 
-
-            if (ballDirection != rotationDirecton) { 
-
-                var extraImpulse = collision.impulse * impulseAmount;
-                collision.rigidbody.AddForce(extraImpulse);
-
-            } else {
-
-                collision.rigidbody.AddForce(new Vector3(0,-1000,0));
-            }
-
+            Debug.DrawLine(collision.transform.position, (collision.transform.position + force), Color.green, 3);
         }
+
     }
+    
 }
