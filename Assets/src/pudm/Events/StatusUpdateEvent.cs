@@ -13,9 +13,9 @@ namespace PUDM.Events
         public override string eventType { get { return "status_update"; } }
 
         public PUDM.DataObjects.Camera camera;
-        public List<PUDM.DataObjects.Lane> lanes;
+        public List<PUDM.DataObjects.LaneDefinition> lanes;
 
-        public StatusUpdateEvent(Camera camera, List<Lane> lanes) : base(){
+        public StatusUpdateEvent(Camera camera, List<LaneDefinition> lanes) : base(){
             this.camera = camera;
             this.lanes = lanes;
         }

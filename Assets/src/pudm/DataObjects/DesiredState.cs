@@ -11,6 +11,6 @@ namespace PUDM.DataObjects
     {
         public int laneID;
         public float position;
-        public float rotation;
+        public bool kick;
     }
 }
