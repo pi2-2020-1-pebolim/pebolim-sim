@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ConstantRotation : MonoBehaviour
+public class ConstantRotation : MonoBehaviour, IRotationProvider
 {
 
     [SerializeField]
@@ -14,10 +14,13 @@ public class ConstantRotation : MonoBehaviour
     void Update()
     {
         lastRotationStep = constanteAngles * Time.deltaTime;
-        transform.RotateAround(transform.position, Vector3.forward, lastRotationStep);    
+        transform.RotateAround(transform.position, Vector3.forward, lastRotationStep);
     }
-
     public float GetLastRotationStep() {
         return lastRotationStep;
+    }
+
+    public bool IsKicking() {
+        return true;
     }
 }
