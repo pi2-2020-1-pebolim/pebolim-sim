@@ -988,7 +988,7 @@ GameObject:
   - component: {fileID: 202855159}
   m_Layer: 0
   m_Name: MidFielder3
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1570,7 +1570,7 @@ GameObject:
   - component: {fileID: 254315092}
   m_Layer: 0
   m_Name: Forward2
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1667,7 +1667,7 @@ GameObject:
   - component: {fileID: 255357395}
   m_Layer: 0
   m_Name: Defender1
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2734,7 +2734,7 @@ GameObject:
   - component: {fileID: 468550535}
   m_Layer: 0
   m_Name: Defender2
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2831,7 +2831,7 @@ GameObject:
   - component: {fileID: 488964375}
   m_Layer: 0
   m_Name: MidFielder1
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4349,7 +4349,7 @@ GameObject:
   - component: {fileID: 757529255}
   m_Layer: 0
   m_Name: Goalkeeper
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5725,7 +5725,7 @@ GameObject:
   - component: {fileID: 1011294411}
   m_Layer: 0
   m_Name: Forward4
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7079,7 +7079,7 @@ GameObject:
   - component: {fileID: 1213811274}
   m_Layer: 0
   m_Name: Forward1
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7806,7 +7806,7 @@ GameObject:
   - component: {fileID: 1310938802}
   m_Layer: 0
   m_Name: Forward5
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7998,7 +7998,7 @@ GameObject:
   - component: {fileID: 1333025248}
   m_Layer: 0
   m_Name: Forward3
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8401,12 +8401,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hostUri: localhost:3333
   fieldSize: {x: 10, y: 5}
+  captureCamera: {fileID: 2079281586}
   referencePoint: {fileID: 1489215761}
   laneGameObjects:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 654570002}
+  - {fileID: 598530413}
+  - {fileID: 929455532}
+  - {fileID: 158424326}
+  movementLimits:
+  - 10.5
+  - 17
+  - 3.5
+  - 13.5
 --- !u!4 &1425179515
 Transform:
   m_ObjectHideFlags: 0
@@ -8826,7 +8832,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1489215761}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -75, y: 0, z: -37}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -9367,7 +9373,7 @@ GameObject:
   - component: {fileID: 1635395342}
   m_Layer: 0
   m_Name: MidFielder2
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

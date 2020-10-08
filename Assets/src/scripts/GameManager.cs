@@ -1,4 +1,4 @@
-using PUDM;
+﻿using PUDM;
 using PUDM.DataObjects;
 using System;
 using System.Collections;
@@ -20,14 +20,21 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     Vector2 fieldSize;
+
+    [SerializeField]
+    GameObject captureCamera;
+
     [SerializeField]
     GameObject referencePoint;
     [SerializeField]
     List<GameObject> laneGameObjects;
+    [SerializeField]
+    List<float> movementLimits;
 
-    List<PUDM.DataObjects.LaneDefinition> lanesState;
+    List<PUDM.DataObjects.LaneDefinition> lanesDefinition;
+    List<PUDM.DataObjects.LaneUpdate> lanesState;
     
-    async void Start()
+    void Start()
     {
         if (Instance is null) {
             instance = this;
@@ -35,32 +42,66 @@ public class GameManager : MonoBehaviour
             Destroy(this.gameObject);
         }
 
-        this.pudmClient = new PUDMClient(this.hostUri);
-        
-        var initialID = 0;
-        lanesState = new List<LaneDefinition>();
+        lanesDefinition = GetLanesDefinition();
+        var field = new FieldDefinition(
+            this.fieldSize.x,
+            this.fieldSize.y,
+            lanesDefinition
+        );
+
+        var cameraSettings = captureCamera.GetComponent<CameraGrabber>().GetCameraSettings();
+
+        this.pudmClient = new PUDMClient(this.hostUri, field, cameraSettings);
+
+
+        this.lanesState = CreateLaneUpdateList(lanesDefinition);
+    }
+
+    List<LaneDefinition> GetLanesDefinition() {
+
+        var currentID = 0;
+        var lanes = new List<LaneDefinition>();
+
         foreach (var lane in laneGameObjects) {
-            lanesState.Add(new LaneDefinition(initialID++, getYfromReferencePoint(lane), lane));
+            lanes.Add(new LaneDefinition(currentID++, getXfromReferencePoint(lane), movementLimits[currentID-1], lane));
+        }
+
+        return lanes;
+    }
+
+    List<LaneUpdate> CreateLaneUpdateList(List<LaneDefinition> definitions) {
+        var lanes = new List<LaneUpdate>();
+
+        foreach (var definition in definitions) {
+            var lane = new LaneUpdate(definition.laneID, definition.xPosition, definition.GetGameObject());
+            lanes.Add(lane);
+        }
+
+        return lanes;
+    }
+
+    void updateLaneInformation() {
+    
+        foreach(var lane in this.lanesState) {
+            lane.Update();
         }
     }
-    
-    private async void OnDestroy()
-    {
-        Debug.Log("Destroying GameManager and pudmClient");
-        this.pudmClient.End();
-    }
-    
-    async void Update() {
+
+    void Update() {
         
         updateLaneInformation();
     }
 
-    void updateLaneInformation() { }
+    private async void OnDestroy() {
+        Debug.Log("Destroying GameManager and pudmClient");
+        this.pudmClient.End();
+    }
 
-    private float getYfromReferencePoint(GameObject target) {
+    private float getXfromReferencePoint(GameObject target) {
+        
         var dist = referencePoint.transform.position - target.transform.position;
 
-        return Mathf.Abs(dist.z);
+        return Mathf.Abs(dist.x);
     }
 
     public void SendUpdate(byte[] image) {

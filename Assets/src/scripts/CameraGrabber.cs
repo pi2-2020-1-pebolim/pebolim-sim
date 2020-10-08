@@ -1,6 +1,7 @@
-﻿using System.Collections;
+﻿using PUDM.DataObjects;
+using System;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class CameraGrabber : MonoBehaviour
@@ -16,11 +17,11 @@ public class CameraGrabber : MonoBehaviour
 
     private bool takeScreenshot = false;
 
-    Camera captureCamera;
+    UnityEngine.Camera captureCamera;
 
     void Start() {
         
-        captureCamera = GetComponent<Camera>();
+        captureCamera = GetComponent<UnityEngine.Camera>();
         captureCamera.enabled = true;
         captureCamera.targetTexture = new RenderTexture(targetResolution.x, targetResolution.y, 24, RenderTextureFormat.ARGB32);
 
@@ -61,5 +62,12 @@ public class CameraGrabber : MonoBehaviour
             GameManager.Instance.SendUpdate(bytes);
             takeScreenshot = false;
         }
+    }
+
+    public CameraSettings GetCameraSettings() {
+        return new CameraSettings(
+            this.targetFrameRate,
+            new Tuple<int, int>(this.targetResolution.x, this.targetResolution.y)
+        );
     }
 }
