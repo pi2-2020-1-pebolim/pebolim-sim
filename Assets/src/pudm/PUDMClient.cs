@@ -1,4 +1,4 @@
-using PUDM.DataObjects;
+﻿using PUDM.DataObjects;
 using PUDM.Events;
 using WebSocketSharp;
 using System;
@@ -20,11 +20,11 @@ namespace PUDM
         private PUDMPublisher publisher;
         private PUDMConsumer consumer;
 
-        public PUDMClient(string hostUri) {
+        public PUDMClient(string hostUri, FieldDefinition field, CameraSettings camera) {
             publisher = new PUDMPublisher(hostUri);
             consumer = new PUDMConsumer(hostUri);
 
-            Hail();
+            Hail(field, camera);
         }
 
         public void End()
@@ -38,10 +38,10 @@ namespace PUDM
             publisher.Publish(evt);
         }
 
-        private void Hail() {
+        private void Hail(FieldDefinition field, CameraSettings camera) {
             var regEvent = new PUDM.Events.RegisterEvent(
-                new PUDM.DataObjects.FieldDefinition(100, 100),
-                new PUDM.DataObjects.CameraSettings(30, new Tuple<int, int>(300, 300))
+                field,
+                camera
             );
 
             Publish(regEvent);

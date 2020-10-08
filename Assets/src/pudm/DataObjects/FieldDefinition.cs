@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PUDM.DataObjects
 {
@@ -12,12 +9,14 @@ namespace PUDM.DataObjects
         public Tuple<float, float> dimensions;
         public List<LaneDefinition> lanes;
 
-        public FieldDefinition(float width, float length) {
+        public FieldDefinition(float width, float length, List<LaneDefinition> lanes) {
             dimensions = new Tuple<float, float>(width, length);
+            this.lanes = lanes;
         }
 
-        public FieldDefinition(Tuple<float, float> dimensions) {
+        public FieldDefinition(Tuple<float, float> dimensions, List<LaneDefinition> lanes) {
             this.dimensions = dimensions;
+            this.lanes = lanes;
         }
     }
 }
