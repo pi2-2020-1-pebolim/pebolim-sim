@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Net.Http.Headers;
 using UnityEngine;
 
 public class Kicker : MonoBehaviour
@@ -8,11 +9,23 @@ public class Kicker : MonoBehaviour
     GameObject rotationProviderObj;
 
     IRotationProvider rotationProvider;
+    private bool localIsKicking;
 
     public float impulseAmount;
 
+    HashSet<Collision> stayCollisions;
+
     private void Start() {
         rotationProvider = rotationProviderObj.GetComponent<IRotationProvider>();
+        stayCollisions = new HashSet<Collision>();
+    }
+
+    void KickCollision(Collision collision) {
+
+        var extraImpulse = Vector3.right * impulseAmount;
+        collision.rigidbody.AddForce(extraImpulse, ForceMode.Impulse);
+
+        Debug.DrawLine(collision.transform.position, (collision.transform.position + extraImpulse), Color.yellow, 3); ;
     }
 
     void OnCollisionEnter(Collision collision) {
@@ -20,20 +33,33 @@ public class Kicker : MonoBehaviour
         Debug.DrawLine(collision.transform.position, (collision.transform.position + collision.impulse), Color.red, 3);
         Debug.DrawLine(collision.transform.position, transform.position, Color.cyan, 3);
 
-        if (rotationProvider.IsKicking()) { 
-
-            var extraImpulse = collision.impulse * impulseAmount;
-            Debug.DrawLine(collision.transform.position, (collision.transform.position + extraImpulse), Color.yellow, 3);
-            collision.rigidbody.AddForce(extraImpulse);
-
-        } else {
-
-            var force = new Vector3(0, -1000, 0);
-            collision.rigidbody.AddForce(force);
-
-            Debug.DrawLine(collision.transform.position, (collision.transform.position + force), Color.green, 3);
+        if (rotationProvider.IsKicking()) {
+            KickCollision(collision);
         }
 
     }
-    
+
+    private void Update() {
+
+        if (localIsKicking == false && rotationProvider.IsKicking()){
+            
+            foreach(var col in stayCollisions){
+                KickCollision(col);
+            }
+        }
+
+        localIsKicking = rotationProvider.IsKicking();
+    }
+
+    private void OnCollisionStay(Collision collision) {
+        stayCollisions.Add(collision);
+    }
+
+    private void OnCollisionExit(Collision collision) {
+        
+        if (stayCollisions.Contains(collision)) {
+            stayCollisions.Remove(collision);
+        }
+
+    }
 }

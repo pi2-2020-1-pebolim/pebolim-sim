@@ -44,8 +44,8 @@ public class MotorMove : MonoBehaviour
     void Update()
     {
         float movement = calculateLimit(gameObject.transform.position.z, decisionServerScript.json[laneId]["position"]);
-        float rotacao = decisionServerScript.json[laneId]["rotation"];
+        //float rotacao = decisionServerScript.json[laneId]["rotation"];
         transform.Translate(0, movement * Time.deltaTime, 0);
-        transform.RotateAround(gameObject.transform.position, Vector3.forward, rotacao * Time.deltaTime);
+        //transform.RotateAround(gameObject.transform.position, Vector3.forward, rotacao * Time.deltaTime);
     }
 }
