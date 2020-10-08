@@ -15,7 +15,6 @@ public class ResetObject : MonoBehaviour
     Quaternion originalRotation;
     Rigidbody rigidbody;
 
-    ForceApply forceApply;
 
     // Start is called before the first frame update
     void Start()
@@ -25,10 +24,8 @@ public class ResetObject : MonoBehaviour
 
         try {
             rigidbody = GetComponent<Rigidbody>();
-            forceApply = GetComponent<ForceApply>();
         } catch (NullReferenceException ex) {
             rigidbody = null;
-            forceApply = null;
         }
     }
 
@@ -56,7 +53,6 @@ public class ResetObject : MonoBehaviour
 
         if (this.rigidbody != null) {
             rigidbody.isKinematic = false;
-            forceApply.ApplyForce = true;
         }
 
         transform.rotation = originalRotation;
