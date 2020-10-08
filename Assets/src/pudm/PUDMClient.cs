@@ -1,4 +1,4 @@
-﻿using PUDM.DataObjects;
+using PUDM.DataObjects;
 using PUDM.Events;
 using WebSocketSharp;
 using System;
@@ -47,7 +47,7 @@ namespace PUDM
             Publish(regEvent);
         }
 
-        public void SendUpdate(byte[] cameraImage, List<LaneDefinition> currentLanesState) {
+        public void SendUpdate(byte[] cameraImage, List<LaneUpdate> currentLanesState) {
 
             var updateEvent = new StatusUpdateEvent(new DataObjects.Camera(cameraImage), currentLanesState);
             Publish(updateEvent);
