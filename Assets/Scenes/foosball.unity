@@ -7666,6 +7666,7 @@ GameObject:
   - component: {fileID: 1287568424}
   - component: {fileID: 1287568423}
   - component: {fileID: 1287568422}
+  - component: {fileID: 1287568428}
   m_Layer: 0
   m_Name: Ball
   m_TagString: Untagged
@@ -7734,7 +7735,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 142960dceb762874e9357826e8bdc024, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -7778,6 +7779,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 21
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1287568428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1287568421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b435fb1a9e8c2f40ab8f2c0364d3c7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resetKey: 114
 --- !u!1 &1310938800
 GameObject:
   m_ObjectHideFlags: 0
@@ -8380,12 +8394,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1425179513}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ec735552009136942849e61e31e0546b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hostUri: localhost:5000
+  hostUri: localhost:3333
   fieldSize: {x: 10, y: 5}
   referencePoint: {fileID: 1489215761}
   laneGameObjects:
@@ -9911,7 +9925,7 @@ Camera:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_RenderingPath: -1
+  m_RenderingPath: 0
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
@@ -11621,7 +11635,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2079281587
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11668,7 +11682,7 @@ Camera:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_RenderingPath: -1
+  m_RenderingPath: 0
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
