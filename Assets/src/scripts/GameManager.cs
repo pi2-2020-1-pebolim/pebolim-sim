@@ -1,4 +1,4 @@
-﻿using PUDM;
+using PUDM;
 using PUDM.DataObjects;
 using System;
 using System.Collections;
@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
     }
 
     public void SendUpdate(byte[] image) {
-        pudmClient.SendUpdate(image, this.lanesState);
+        pudmClient.SendUpdate(image, lanesState);
     }
 
 }
