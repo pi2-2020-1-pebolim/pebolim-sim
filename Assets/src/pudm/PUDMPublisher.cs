@@ -21,7 +21,7 @@ namespace Assets.src.pudm
         private readonly BlockingCollection<PUDMEvent> evtQueue;
         private Thread jobThread;
         private bool acceptEvents;
-        private const int maxEvents = 180;
+        private const int maxEvents = 30;
         
         string hostUri;
 
