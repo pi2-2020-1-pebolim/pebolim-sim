@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Rendering;
 using WebSocketSharp;
 
 namespace Assets.src.pudm
@@ -37,13 +38,21 @@ namespace Assets.src.pudm
 
         public void Publish(PUDMEvent evt) {
             if (acceptEvents) {
-                evtQueue.Add(evt);
-
-                Debug.Log("Added evt to queue");
 
                 if (evtQueue.Count > maxEvents) {
-              //      evtQueue.TryDequeue(out _);
+                    Debug.LogWarning("Queue is full, trying to remove older evt...");
+                    var removedEvent = evtQueue.Take();
+
+                    if (removedEvent.eventType == "register") {
+                        Debug.LogWarning("Removed event was of type Register, adding it back");
+                        evtQueue.Add(removedEvent);
+                    }
                 }
+
+                evtQueue.Add(evt);
+
+                // Debug.Log("Added evt to queue");
+
             }
         }
 
@@ -52,8 +61,6 @@ namespace Assets.src.pudm
             this.acceptEvents = false;
 
             evtQueue.CompleteAdding();
-            // empty the job queue before aborting thread
-            //while (evtQueue.TryDequeue(out _)) {}
             jobThread.Abort();
         }
 
@@ -66,7 +73,10 @@ namespace Assets.src.pudm
                 
                 foreach (var evt in evtQueue.GetConsumingEnumerable()) { 
 
-                    Debug.Log("Queue at: " + evtQueue.Count + "/" + maxEvents);
+                    if (evtQueue.Count > 1) {
+
+                        Debug.Log("Queue at: " + evtQueue.Count + "/" + maxEvents);
+                    }
                    
                     try {
                         Emit(evt);
