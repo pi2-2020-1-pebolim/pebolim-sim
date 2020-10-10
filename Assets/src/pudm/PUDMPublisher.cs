@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
+using PUDM;
 using PUDM.Events;
 using System;
 using System.Collections.Concurrent;
@@ -77,6 +78,10 @@ namespace Assets.src.pudm
         }
 
         private void Emit(PUDMEvent evt) {
+
+            if (GameManager.Instance.delayEmit) {
+                Thread.Sleep(100);
+            }
 
             // maps the endpoint to the eventType on the server
             var endpoint = hostUri + evt.eventType;

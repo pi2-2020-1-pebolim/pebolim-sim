@@ -33,7 +33,9 @@ public class GameManager : MonoBehaviour
 
     List<PUDM.DataObjects.LaneDefinition> lanesDefinition;
     List<PUDM.DataObjects.LaneUpdate> lanesState;
-    
+
+    public bool delayEmit = false;
+
     void Start()
     {
         if (Instance is null) {
@@ -90,6 +92,10 @@ public class GameManager : MonoBehaviour
     void Update() {
         
         updateLaneInformation();
+
+        if (Input.GetKeyUp(KeyCode.P)) {
+            delayEmit = !delayEmit;
+        }
     }
 
     private async void OnDestroy() {
