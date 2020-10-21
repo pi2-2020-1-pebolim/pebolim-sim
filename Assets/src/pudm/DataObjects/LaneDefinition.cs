@@ -42,14 +42,14 @@ namespace PUDM.DataObjects
 
             if (playerCount <= 1)
                 return 0;
-
-            kickers.OrderBy(kicker => kicker.transform.position.z);
-            var fisrt = kickers[0];
+            
+            kickers = kickers.OrderBy(kicker => kicker.transform.position.z).ToList();;
+            var first = kickers[0];
             var second = kickers[1];
 
-            var distance = second.transform.position.z - fisrt.transform.position.z;
+            var distance = second.transform.position.z - first.transform.position.z;
 
-            return distance;
+            return Math.Abs(distance);
         }
 
         public GameObject GetGameObject() {
