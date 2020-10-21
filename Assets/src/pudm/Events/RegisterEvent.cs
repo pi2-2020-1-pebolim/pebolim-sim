@@ -17,7 +17,9 @@ namespace PUDM.Events
         public PUDM.DataObjects.CameraSettings cameraSettings;
 
         public RegisterEvent(FieldDefinition fieldDefinition, CameraSettings cameraSettings) : base() {
-            
+
+            this.fieldDefinition = fieldDefinition;
+            this.cameraSettings = cameraSettings;
         }
 
     }

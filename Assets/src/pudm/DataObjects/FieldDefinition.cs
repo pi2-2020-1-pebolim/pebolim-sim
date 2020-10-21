@@ -6,16 +6,22 @@ namespace PUDM.DataObjects
     [Serializable]
     public class FieldDefinition
     {
-        public Tuple<float, float> dimensions;
+        public List<float> dimensions;
         public List<LaneDefinition> lanes;
 
         public FieldDefinition(float width, float length, List<LaneDefinition> lanes) {
-            dimensions = new Tuple<float, float>(width, length);
+            dimensions = new List<float>();
+            dimensions.Add(width);
+            dimensions.Add(length);
             this.lanes = lanes;
         }
 
         public FieldDefinition(Tuple<float, float> dimensions, List<LaneDefinition> lanes) {
-            this.dimensions = dimensions;
+            
+            this.dimensions = new List<float>();
+            this.dimensions.Add(dimensions.Item1);
+            this.dimensions.Add(dimensions.Item2);
+
             this.lanes = lanes;
         }
     }
