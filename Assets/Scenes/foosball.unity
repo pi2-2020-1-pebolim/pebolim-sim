@@ -8400,7 +8400,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hostUri: localhost:3333
-  fieldSize: {x: 10, y: 5}
+  fieldSize: {x: 150, y: 74}
   captureCamera: {fileID: 2079281586}
   referencePoint: {fileID: 1489215761}
   laneGameObjects:
@@ -8413,6 +8413,7 @@ MonoBehaviour:
   - 17
   - 3.5
   - 13.5
+  delayEmit: 0
 --- !u!4 &1425179515
 Transform:
   m_ObjectHideFlags: 0
