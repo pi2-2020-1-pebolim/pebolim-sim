@@ -75,7 +75,7 @@ namespace Assets.src.pudm
 
                     if (evtQueue.Count > 1) {
 
-                        Debug.Log("Queue at: " + evtQueue.Count + "/" + maxEvents);
+                        //Debug.Log("Queue at: " + evtQueue.Count + "/" + maxEvents);
                     }
                    
                     try {
@@ -110,7 +110,7 @@ namespace Assets.src.pudm
             var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
             using (var streamReader = new StreamReader(httpResponse.GetResponseStream())) {
                 var result = streamReader.ReadToEnd();
-                Debug.Log(result);
+                //Debug.Log(result);
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using PUDM;
 using PUDM.DataObjects;
+using PUDM.Events;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -36,6 +37,9 @@ public class GameManager : MonoBehaviour
 
     public bool delayEmit = false;
 
+    private MovementManager movementManager;
+    private JsonGenerate mockMovementManager;
+
     void Start()
     {
         if (Instance is null) {
@@ -44,7 +48,7 @@ public class GameManager : MonoBehaviour
             Destroy(this.gameObject);
         }
 
-        lanesDefinition = GetLanesDefinition();
+        lanesDefinition = CreateLanesDefinition();
         var field = new FieldDefinition(
             this.fieldSize.x,
             this.fieldSize.y,
@@ -57,9 +61,11 @@ public class GameManager : MonoBehaviour
 
 
         this.lanesState = CreateLaneUpdateList(lanesDefinition);
+
+        movementManager = GameObject.Find("DecisionServer").GetComponent<MovementManager>();
     }
 
-    List<LaneDefinition> GetLanesDefinition() {
+    List<LaneDefinition> CreateLanesDefinition() {
 
         var currentID = 0;
         var lanes = new List<LaneDefinition>();
@@ -69,6 +75,10 @@ public class GameManager : MonoBehaviour
         }
 
         return lanes;
+    }
+
+    public List<LaneDefinition> GetLaneDefinitions() {
+        return lanesDefinition;
     }
 
     List<LaneUpdate> CreateLaneUpdateList(List<LaneDefinition> definitions) {
@@ -89,6 +99,19 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public MovementManager GetMovementManager() {
+
+        return (mockMovementManager == null) ? movementManager : mockMovementManager;
+    }
+
+    public void DoActionEvent(ActionEvent evt) {
+
+        foreach (var state in evt.desiredState) {
+            movementManager.SetState(state, evt.timestamp);
+        }
+
+    }
+
     void Update() {
         
         updateLaneInformation();
@@ -96,9 +119,13 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.P)) {
             delayEmit = !delayEmit;
         }
+
+        if (Input.GetKeyUp(KeyCode.M)) {
+            mockMovementManager = (mockMovementManager == null) ? GetComponent<JsonGenerate>() : null;
+        }
     }
 
-    private async void OnDestroy() {
+    void OnDestroy() {
         Debug.Log("Destroying GameManager and pudmClient");
         this.pudmClient.End();
     }

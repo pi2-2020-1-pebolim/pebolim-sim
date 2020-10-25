@@ -47,19 +47,25 @@ namespace PUDM
             webSocket.OnMessage += async (sender, e) =>
             {
                 var data = e.Data;
-                
-          
+                //Debug.Log(data);
+
+
                 // example string:
                 // '42["action",{"evenType":"action","desiredState":[{"laneID":0,"position":0,"kick":false}]}]'
                 // target string:
                 // {"evenType":"action","desiredState":[{"laneID":0,"position":0,"kick":false}]}
 
-                if (data.Contains("42[\"action\","))
+                if (data.Contains("42[\"action\""))
                 {
-                    // remove '42["action",' from the start
-                    data = data.Remove(0, 12);
-                    // remove ']' from the end
-                    data = data.Remove(data.Length - 1, 1);
+                    Debug.Log(data);
+                    
+                    
+                    data = data.Remove(0, 13);
+
+                    const int removeFromEnd = 2;
+                    data = data.Remove(data.Length - removeFromEnd, removeFromEnd);
+
+                    data = data.Replace("\\", "");
 
                     ConsumeAction(ActionEvent.FromJsonString(data));
                 }
@@ -77,8 +83,8 @@ namespace PUDM
 
         void ConsumeAction(ActionEvent evt)
         {
-            
-            
+
+            GameManager.Instance.DoActionEvent(evt);
             
         }
     }

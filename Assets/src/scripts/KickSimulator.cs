@@ -13,6 +13,7 @@ public class KickSimulator : MonoBehaviour, IRotationProvider
 
     float lastRotationStep;
     private float lastAngle;
+    private long lastKickTimestamp = 0;
 
     [SerializeField]
     Vector2 kickLimits;
@@ -39,11 +40,14 @@ public class KickSimulator : MonoBehaviour, IRotationProvider
         target = kickLimits.x;
     }
 
-    void Kick() {
+    public void Kick(long timestamp) {
+
+        if (timestamp == lastKickTimestamp) return;
 
         if (currentState != KickStates.Kicking) {
             currentState = KickStates.Kicking;
             target = kickLimits.y;
+            lastKickTimestamp = timestamp;
         }
     }
 
@@ -56,7 +60,8 @@ public class KickSimulator : MonoBehaviour, IRotationProvider
         UpdateState();
 
         if (Input.GetKeyUp(KeyCode.Space)) {
-            Kick();
+            // facking the timestamp value
+            Kick(lastKickTimestamp + 1);
         }
 
         // save the data for the next frame

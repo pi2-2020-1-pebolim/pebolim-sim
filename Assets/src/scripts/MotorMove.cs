@@ -1,23 +1,38 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 using UnityEngineInternal;
 
 public class MotorMove : MonoBehaviour
-{    
-    
+{
+
     // private float limitTranslateRod1 = 10.5f;
     // private float limitTranslateRod2 = 17.0f;
     // private float limitTranslateRod4 = 3.5f;
     // private float limitTranslateRod6 = 13.5f; 
-    
+
     [SerializeField]
     private float limitTranslate;
-    
-    [SerializeField]
-    private string laneId;
 
-    private JsonGenerate decisionServerScript;
+    [SerializeField]
+    private int laneId;
+
+    private Vector3 initialPosition;
+    private KickSimulator kickSimulator;
+
+    const float speed = 2;
+
+    [SerializeField]
+    float targetPosition;
+    [SerializeField]
+    float currentPosition;
+    [SerializeField]
+    float deltaPosition;
+
+    enum MotorState {Moving, Idle};
+    MotorState currentState = MotorState.Idle;
+
 
     private float calculateLimit(float positionZ, float movement)
     {
@@ -34,18 +49,29 @@ public class MotorMove : MonoBehaviour
         return movement;
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        decisionServerScript = GameObject.Find("DecisionServer").GetComponent<JsonGenerate>();
+    private void Start() {
+        this.initialPosition = transform.position;
+        this.kickSimulator = GetComponent<KickSimulator>();
     }
 
-    // Update is called once per frame
+
     void Update()
     {
-        float movement = calculateLimit(gameObject.transform.position.z, decisionServerScript.json[laneId]["position"]);
-        //float rotacao = decisionServerScript.json[laneId]["rotation"];
-        transform.Translate(0, movement * Time.deltaTime, 0);
-        //transform.RotateAround(gameObject.transform.position, Vector3.forward, rotacao * Time.deltaTime);
+        var data = GameManager.Instance.GetMovementManager().GetState(laneId);
+        var state = data.Item1;
+        var timestamp = data.Item2;
+
+        currentPosition = transform.position.z;
+
+        targetPosition = initialPosition.z + state.position;
+        targetPosition = calculateLimit(currentPosition, targetPosition);
+
+        deltaPosition = targetPosition - currentPosition;
+
+        transform.Translate(0, deltaPosition * Time.deltaTime * speed, 0);
+
+        if (state.kick) {
+            kickSimulator.Kick(timestamp);
+        }
     }
 }
