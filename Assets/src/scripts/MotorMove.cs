@@ -21,14 +21,15 @@ public class MotorMove : MonoBehaviour
     private Vector3 initialPosition;
     private KickSimulator kickSimulator;
 
-    const float speed = 2;
-
     [SerializeField]
     float targetPosition;
     [SerializeField]
     float currentPosition;
     [SerializeField]
     float deltaPosition;
+
+    long lastTimestamp = 0;
+    const float speed = 2;
 
     enum MotorState {Moving, Idle};
     MotorState currentState = MotorState.Idle;
@@ -60,15 +61,25 @@ public class MotorMove : MonoBehaviour
         var data = GameManager.Instance.GetMovementManager().GetState(laneId);
         var state = data.Item1;
         var timestamp = data.Item2;
-
+    
         currentPosition = transform.position.z;
 
-        targetPosition = initialPosition.z + state.position;
-        targetPosition = calculateLimit(currentPosition, targetPosition);
+        if (lastTimestamp != timestamp) {
+            currentState = MotorState.Moving;
+    
+            targetPosition = initialPosition.z + state.position;
+            targetPosition = calculateLimit(currentPosition, targetPosition);
+        }
+
+        if (Mathf.Approximately(currentPosition, targetPosition)) {
+            currentState = MotorState.Idle;
+        }
 
         deltaPosition = targetPosition - currentPosition;
 
-        transform.Translate(0, deltaPosition * Time.deltaTime * speed, 0);
+        if(currentState == MotorState.Moving) {
+            transform.Translate(0, deltaPosition * Time.deltaTime * speed, 0);
+        }
 
         if (state.kick) {
             kickSimulator.Kick(timestamp);
