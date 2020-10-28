@@ -25,26 +25,28 @@ namespace PUDM
         private void Connect() {
 
             webSocket = new WebSocket(this.hostUri);
+            webSocket.WaitTime = new TimeSpan(0, 0, 1);
+            webSocket.Compression = CompressionMethod.Deflate;
 
-            webSocket.OnOpen += async (sender, e) => {
+            webSocket.OnOpen += (sender, e) => {
                 Debug.Log("SocketIO Connected " + sender.ToString() + " " + e.ToString());
             };
 
-            webSocket.OnClose += async (sender, e) => {
-                Debug.LogWarning("SocketIO Disconnected " + sender.ToString() + " " + e.Reason);
-
+            webSocket.OnClose += (sender, e) => {
+                Debug.LogError("SocketIO Disconnected " + sender.ToString() + " " + e.Reason);
+                
                 if (this.closing == false) {
                     webSocket.Connect();
                 }
             };
 
-            webSocket.OnError += async (sender, e) => {
+            webSocket.OnError += (sender, e) => {
                 Debug.LogError(sender);
                 Debug.LogError(e.Exception);
                 Debug.LogError(e.Message);
             };
 
-            webSocket.OnMessage += async (sender, e) =>
+            webSocket.OnMessage += (sender, e) =>
             {
                 var data = e.Data;
                 //Debug.Log(data);
@@ -60,9 +62,9 @@ namespace PUDM
                     Debug.Log(data);
                     
                     
-                    data = data.Remove(0, 13);
+                    data = data.Remove(0, 12);
 
-                    const int removeFromEnd = 2;
+                    const int removeFromEnd = 1;
                     data = data.Remove(data.Length - removeFromEnd, removeFromEnd);
 
                     data = data.Replace("\\", "");
