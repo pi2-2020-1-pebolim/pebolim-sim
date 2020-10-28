@@ -81,12 +81,12 @@ namespace Assets.src.pudm
                     try {
                         Emit(evt);
 
-                        if(evt.eventType == "register") {
-                            Publish(evt);
-                        }
-
                     }catch (Exception e) {
                         Debug.LogException(e);
+                    } finally {
+                        if (evt.eventType == "register") {
+                            Publish(evt);
+                        }
                     }
                 }
            }
