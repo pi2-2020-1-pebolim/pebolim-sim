@@ -21,7 +21,7 @@ namespace Assets.src.pudm
         private readonly BlockingCollection<PUDMEvent> evtQueue;
         private Thread jobThread;
         private bool acceptEvents;
-        private const int maxEvents = 30;
+        private const int maxEvents = 30 + 1; // 30 frames + 1 position that is always a register event
         
         string hostUri;
 
@@ -80,6 +80,11 @@ namespace Assets.src.pudm
                    
                     try {
                         Emit(evt);
+
+                        if(evt.eventType == "register") {
+                            Publish(evt);
+                        }
+
                     }catch (Exception e) {
                         Debug.LogException(e);
                     }
