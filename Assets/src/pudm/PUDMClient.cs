@@ -19,10 +19,15 @@ namespace PUDM
     {
         private PUDMPublisher publisher;
         private PUDMConsumer consumer;
+        private int player_number;
 
-        public PUDMClient(string hostUri, FieldDefinition field, CameraSettings camera) {
-            publisher = new PUDMPublisher(hostUri);
-            consumer = new PUDMConsumer(hostUri);
+        public PUDMClient(string hostUri, FieldDefinition field, CameraSettings camera, int player_number) {
+            
+            this.player_number = player_number;
+            
+            publisher = new PUDMPublisher(hostUri, player_number);
+            consumer = new PUDMConsumer(hostUri, player_number);
+
 
             Hail(field, camera);
         }

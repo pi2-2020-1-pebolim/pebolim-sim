@@ -25,7 +25,11 @@ namespace Assets.src.pudm
         
         string hostUri;
 
-        public PUDMPublisher(string hostUri) {
+        private int player_number;
+
+        public PUDMPublisher(string hostUri, int player_number) {
+
+            this.player_number = player_number;
 
             this.hostUri = "http://" + hostUri + "/api/";
             this.evtQueue = new BlockingCollection<PUDMEvent>();
@@ -94,7 +98,7 @@ namespace Assets.src.pudm
 
         private void Emit(PUDMEvent evt) {
 
-            if (GameManager.Instance.delayEmit) {
+            if (GameManager.GetInstance(this.player_number).delayEmit) {
                 Thread.Sleep(100);
             }
 

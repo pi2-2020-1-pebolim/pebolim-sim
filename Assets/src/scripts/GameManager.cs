@@ -1,18 +1,16 @@
 ﻿using PUDM;
 using PUDM.DataObjects;
 using PUDM.Events;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     // game mamanger is a singleton
-    private static GameManager instance;
-    public static GameManager Instance { get => instance; }
+    private static GameManager[] instances = new GameManager[2];
+
+    [SerializeField]
+    int player_number;
 
     private PUDMClient pudmClient;
 
@@ -40,10 +38,14 @@ public class GameManager : MonoBehaviour
     private MovementManager movementManager;
     private JsonGenerate mockMovementManager;
 
+    public static GameManager GetInstance(int player) {
+        return GameManager.instances[player];
+    }
+
     void Start()
     {
-        if (Instance is null) {
-            instance = this;
+        if (instances[player_number] is null) {
+            instances[player_number] = this;
         } else {
             Destroy(this.gameObject);
         }
@@ -57,7 +59,7 @@ public class GameManager : MonoBehaviour
 
         var cameraSettings = captureCamera.GetComponent<CameraGrabber>().GetCameraSettings();
 
-        this.pudmClient = new PUDMClient(this.hostUri, field, cameraSettings);
+        this.pudmClient = new PUDMClient(this.hostUri, field, cameraSettings, this.player_number);
 
 
         this.lanesState = CreateLaneUpdateList(lanesDefinition);
