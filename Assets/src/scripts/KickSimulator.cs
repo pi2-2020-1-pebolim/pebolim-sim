@@ -111,8 +111,8 @@ public class KickSimulator : MonoBehaviour, IRotationProvider
 
         var anglesToWalk = Time.deltaTime * constanteAngles;
 
-        if (deltaDistance < anglesToWalk) {
-            anglesToWalk = deltaDistance;
+        if (deltaDistance < Mathf.Abs(anglesToWalk)) {
+            anglesToWalk = deltaDistance * (constanteAngles < 0 ? -1: 1);
         }
 
         return (currentState == KickStates.Kicking ? 1 : -1) * anglesToWalk;

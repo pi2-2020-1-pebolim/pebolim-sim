@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class CameraGrabber : MonoBehaviour
@@ -57,11 +58,37 @@ public class CameraGrabber : MonoBehaviour
             
             byte[] bytes = screenShot.EncodeToJPG();
             
+            GameManager.GetInstance(0).SendUpdate(bytes);
+            if (GameManager.GetInstance(1) != null) {
+                var reversed = FlipTextureVertically(screenShot);
+                GameManager.GetInstance(1).SendUpdate(reversed.EncodeToPNG());
+                Destroy(reversed);
+            }
+
             Destroy(screenShot);
-            
-            GameManager.Instance.SendUpdate(bytes);
             takeScreenshot = false;
         }
+    }
+
+    public Texture2D FlipTextureVertically(Texture2D original) {
+        var originalPixels = original.GetPixels();
+
+        Color[] newPixels = new Color[originalPixels.Length];
+
+        int width = original.width;
+        int rows = original.height;
+
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < rows; y++) {
+                newPixels[x + y * width] = originalPixels[(width - x - 1) + (rows - y - 1) * width];
+            }
+        }
+
+        var newTexture = new Texture2D(original.width, original.height, original.format, false);
+        newTexture.SetPixels(newPixels);
+        newTexture.Apply();
+
+        return newTexture;
     }
 
     public CameraSettings GetCameraSettings() {

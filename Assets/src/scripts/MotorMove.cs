@@ -18,6 +18,9 @@ public class MotorMove : MonoBehaviour
     [SerializeField]
     private int laneId;
 
+    [SerializeField]
+    private int player_number;
+
     private Vector3 initialPosition;
     private KickSimulator kickSimulator;
 
@@ -58,7 +61,7 @@ public class MotorMove : MonoBehaviour
 
     void Update()
     {
-        var data = GameManager.Instance.GetMovementManager().GetState(laneId);
+        var data = GameManager.GetInstance(player_number).GetMovementManager().GetState(laneId);
         var state = data.Item1;
         var timestamp = data.Item2;
     

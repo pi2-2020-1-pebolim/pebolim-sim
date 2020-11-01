@@ -14,8 +14,11 @@ public class MovementManager : MonoBehaviour
 
     protected int laneCount;
 
+    [SerializeField]
+    private int player_number;
+
     public virtual void Initialize() {
-        laneCount = GameManager.Instance.GetLaneDefinitions().Count;
+        laneCount = GameManager.GetInstance(player_number).GetLaneDefinitions().Count;
 
         currentStates = new Dictionary<int, Tuple<DesiredState, long>>();
         for (var i = 0; i < laneCount; i++) {

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using PUDM.Events;
+using UnityEditor.UI;
 using UnityEngine;
 using WebSocketSharp;
 
@@ -17,7 +18,12 @@ namespace PUDM
         string hostUri;
         private bool closing;
 
-        public PUDMConsumer(string hostUri) {
+        private int player_number;
+
+        public PUDMConsumer(string hostUri, int player_number) {
+
+            this.player_number = player_number;
+
             this.hostUri = "ws://" + hostUri + "/socket.io/?EIO=2&transport=websocket";
             Connect();
         }
@@ -86,7 +92,7 @@ namespace PUDM
         void ConsumeAction(ActionEvent evt)
         {
 
-            GameManager.Instance.DoActionEvent(evt);
+            GameManager.GetInstance(this.player_number).DoActionEvent(evt);
             
         }
     }
