@@ -25,7 +25,7 @@ namespace PUDM
         private void Connect() {
 
             webSocket = new WebSocket(this.hostUri);
-            webSocket.WaitTime = new TimeSpan(0, 0, 1);
+            webSocket.WaitTime = new TimeSpan(0, 0, 3);
             webSocket.Compression = CompressionMethod.Deflate;
 
             webSocket.OnOpen += (sender, e) => {
