@@ -991,6 +991,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationProviderObj: {fileID: 455869353}
+  isSecondPlayer: 1
   impulseAmount: 40
 --- !u!1 &155697091
 GameObject:
@@ -1674,6 +1675,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationProviderObj: {fileID: 455869353}
+  isSecondPlayer: 1
   impulseAmount: 40
 --- !u!1 &328872046
 GameObject:
@@ -1766,6 +1768,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationProviderObj: {fileID: 2129321294}
+  isSecondPlayer: 0
   impulseAmount: 40
 --- !u!65 &336783647
 BoxCollider:
@@ -1890,6 +1893,7 @@ MonoBehaviour:
   - 3.5
   - 13.5
   delayEmit: 0
+  movementManager: {fileID: 1915731696}
 --- !u!4 &374699771
 Transform:
   m_ObjectHideFlags: 0
@@ -2730,6 +2734,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationProviderObj: {fileID: 821282750}
+  isSecondPlayer: 1
   impulseAmount: 40
 --- !u!1 &542607007
 GameObject:
@@ -2936,6 +2941,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationProviderObj: {fileID: 821282750}
+  isSecondPlayer: 1
   impulseAmount: 40
 --- !u!1 &564250017
 GameObject:
@@ -3553,6 +3559,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationProviderObj: {fileID: 27039177}
+  isSecondPlayer: 0
   impulseAmount: 40
 --- !u!65 &619341600
 BoxCollider:
@@ -4050,6 +4057,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationProviderObj: {fileID: 1341725618}
+  isSecondPlayer: 1
   impulseAmount: 40
 --- !u!1 &719960976
 GameObject:
@@ -4900,6 +4908,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationProviderObj: {fileID: 27039177}
+  isSecondPlayer: 0
   impulseAmount: 40
 --- !u!65 &831579671
 BoxCollider:
@@ -5342,6 +5351,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationProviderObj: {fileID: 2129321294}
+  isSecondPlayer: 0
   impulseAmount: 40
 --- !u!65 &848980039
 BoxCollider:
@@ -6323,6 +6333,7 @@ GameObject:
   - component: {fileID: 1060306381}
   - component: {fileID: 1060306380}
   - component: {fileID: 1060306379}
+  - component: {fileID: 1060306386}
   m_Layer: 0
   m_Name: Ball
   m_TagString: Untagged
@@ -6356,6 +6367,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forceMultiplier: {x: 5000, y: 1000, z: 5000}
+  velocity: {x: 0, y: 0, z: 0}
+  velocity_threshold: {x: 10, y: 0, z: 10}
 --- !u!54 &1060306381
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -6370,7 +6383,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 4
   m_CollisionDetection: 1
 --- !u!135 &1060306382
 SphereCollider:
@@ -6448,6 +6461,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1060306386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1060306378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b61b92fe5a725b748ab91ba5b03f3cdd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1062986550
 GameObject:
   m_ObjectHideFlags: 0
@@ -6495,6 +6520,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationProviderObj: {fileID: 2129321294}
+  isSecondPlayer: 0
   impulseAmount: 40
 --- !u!65 &1062986553
 BoxCollider:
@@ -6667,6 +6693,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationProviderObj: {fileID: 841113861}
+  isSecondPlayer: 1
   impulseAmount: 40
 --- !u!1 &1075054126
 GameObject:
@@ -7062,6 +7089,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationProviderObj: {fileID: 455869353}
+  isSecondPlayer: 1
   impulseAmount: 40
 --- !u!1 &1170881918
 GameObject:
@@ -7526,6 +7554,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationProviderObj: {fileID: 927130942}
+  isSecondPlayer: 0
   impulseAmount: 40
 --- !u!65 &1231049706
 BoxCollider:
@@ -7851,6 +7880,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationProviderObj: {fileID: 2129321294}
+  isSecondPlayer: 0
   impulseAmount: 40
 --- !u!65 &1296409432
 BoxCollider:
@@ -8959,6 +8989,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationProviderObj: {fileID: 927130942}
+  isSecondPlayer: 0
   impulseAmount: 40
 --- !u!65 &1624199391
 BoxCollider:
@@ -9421,6 +9452,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationProviderObj: {fileID: 455869353}
+  isSecondPlayer: 1
   impulseAmount: 40
 --- !u!1 &1697466091
 GameObject:
@@ -9816,6 +9848,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationProviderObj: {fileID: 841113861}
+  isSecondPlayer: 1
   impulseAmount: 40
 --- !u!1 &1770186043
 GameObject:
@@ -10247,6 +10280,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationProviderObj: {fileID: 927130942}
+  isSecondPlayer: 0
   impulseAmount: 40
 --- !u!65 &1841655580
 BoxCollider:
@@ -10675,6 +10709,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationProviderObj: {fileID: 50168758}
+  isSecondPlayer: 0
   impulseAmount: 40
 --- !u!65 &1885938258
 BoxCollider:
@@ -11020,6 +11055,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationProviderObj: {fileID: 2129321294}
+  isSecondPlayer: 0
   impulseAmount: 40
 --- !u!65 &1923817925
 BoxCollider:
@@ -11717,6 +11753,7 @@ MonoBehaviour:
   - 3.5
   - 13.5
   delayEmit: 0
+  movementManager: {fileID: 328872047}
 --- !u!4 &2063271186
 Transform:
   m_ObjectHideFlags: 0
@@ -12034,6 +12071,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationProviderObj: {fileID: 841113861}
+  isSecondPlayer: 1
   impulseAmount: 40
 --- !u!1 &2099492365
 GameObject:
@@ -12144,6 +12182,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationProviderObj: {fileID: 455869353}
+  isSecondPlayer: 1
   impulseAmount: 40
 --- !u!1 &2100267531
 GameObject:

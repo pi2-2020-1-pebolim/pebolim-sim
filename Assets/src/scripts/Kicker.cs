@@ -8,6 +8,9 @@ public class Kicker : MonoBehaviour
     [SerializeField]
     GameObject rotationProviderObj;
 
+    [SerializeField]
+    bool isSecondPlayer;
+
     IRotationProvider rotationProvider;
     private bool localIsKicking;
 
@@ -22,7 +25,9 @@ public class Kicker : MonoBehaviour
 
     void KickCollision(Collision collision) {
 
-        var extraImpulse = Vector3.right * impulseAmount;
+        var vector = (isSecondPlayer ? Vector3.left : Vector3.right);
+
+        var extraImpulse = vector * impulseAmount;
         collision.rigidbody.AddForce(extraImpulse, ForceMode.Impulse);
 
         Debug.DrawLine(collision.transform.position, (collision.transform.position + extraImpulse), Color.yellow, 3); ;

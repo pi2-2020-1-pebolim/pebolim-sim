@@ -35,7 +35,9 @@ public class GameManager : MonoBehaviour
 
     public bool delayEmit = false;
 
+    [SerializeField]
     private MovementManager movementManager;
+    
     private JsonGenerate mockMovementManager;
 
     public static GameManager GetInstance(int player) {
@@ -61,10 +63,9 @@ public class GameManager : MonoBehaviour
 
         this.pudmClient = new PUDMClient(this.hostUri, field, cameraSettings, this.player_number);
 
-
         this.lanesState = CreateLaneUpdateList(lanesDefinition);
 
-        movementManager = GameObject.Find("DecisionServer").GetComponent<MovementManager>();
+        Application.targetFrameRate = 60;
     }
 
     List<LaneDefinition> CreateLanesDefinition() {
@@ -125,6 +126,7 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.M)) {
             mockMovementManager = (mockMovementManager == null) ? GetComponent<JsonGenerate>() : null;
         }
+
     }
 
     void OnDestroy() {
