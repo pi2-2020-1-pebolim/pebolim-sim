@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class CameraGrabber : MonoBehaviour
 {
@@ -16,11 +17,13 @@ public class CameraGrabber : MonoBehaviour
     [SerializeField]
     Vector2Int targetResolution;
 
-    private bool takeScreenshot = false;
+    Queue<int> screenshotQueue;
 
     UnityEngine.Camera captureCamera;
 
     void Start() {
+
+        screenshotQueue = new Queue<int>();
         
         captureCamera = GetComponent<UnityEngine.Camera>();
         captureCamera.enabled = true;
@@ -36,41 +39,49 @@ public class CameraGrabber : MonoBehaviour
 
         if (timeAccumulator >= timeBetweenFrames)
         {
-            //PrepareCaptureFrame();
-            takeScreenshot = true;
+            screenshotQueue.Enqueue(0);
+            screenshotQueue.Enqueue(1);
             timeAccumulator -= timeBetweenFrames;
         }
 
     }
 
+    void TakeScreenshot(int player) {
+
+        var defaultRenderTexture = RenderTexture.active;
+        RenderTexture.active = captureCamera.targetTexture;
+
+        Texture2D screenShot = new Texture2D(targetResolution.x, targetResolution.y, TextureFormat.ARGB32, false);
+        screenShot.ReadPixels(new Rect(0, 0, targetResolution.x, targetResolution.y), 0, 0);
+        screenShot.Apply();
+        
+        RenderTexture.active = defaultRenderTexture;
+    
+        
+        if (player == 1) {
+    
+            var reversed = FlipTextureVertically(screenShot);
+            Destroy(screenShot);
+            screenShot = reversed;
+            
+        }
+
+        byte[] bytes = screenShot.EncodeToJPG();
+        GameManager.GetInstance(player).SendUpdate(bytes);
+        Destroy(screenShot);
+    }
+
     private void LateUpdate() {
         
-        if (takeScreenshot) {
-          
-            var defaultRenderTexture = RenderTexture.active;
-            RenderTexture.active = captureCamera.targetTexture;
-            
-            Texture2D screenShot = new Texture2D(targetResolution.x, targetResolution.y, TextureFormat.ARGB32, false);
-            screenShot.ReadPixels(new Rect(0, 0, targetResolution.x, targetResolution.y), 0, 0);
-            screenShot.Apply();
+        if (screenshotQueue.Count > 0) {
 
-            RenderTexture.active = defaultRenderTexture;
-            
-            byte[] bytes = screenShot.EncodeToJPG();
-            
-            GameManager.GetInstance(0).SendUpdate(bytes);
-            if (GameManager.GetInstance(1) != null) {
-                var reversed = FlipTextureVertically(screenShot);
-                GameManager.GetInstance(1).SendUpdate(reversed.EncodeToPNG());
-                Destroy(reversed);
-            }
-
-            Destroy(screenShot);
-            takeScreenshot = false;
+            var player = screenshotQueue.Dequeue();
+            TakeScreenshot(player);
         }
     }
 
     public Texture2D FlipTextureVertically(Texture2D original) {
+        
         var originalPixels = original.GetPixels();
 
         Color[] newPixels = new Color[originalPixels.Length];
@@ -84,7 +95,7 @@ public class CameraGrabber : MonoBehaviour
             }
         }
 
-        var newTexture = new Texture2D(original.width, original.height, original.format, false);
+        var newTexture = new Texture2D(original.width, original.height);
         newTexture.SetPixels(newPixels);
         newTexture.Apply();
 

@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using PUDM.Events;
-using UnityEditor.UI;
 using UnityEngine;
 using WebSocketSharp;
 
@@ -31,17 +30,17 @@ namespace PUDM
         private void Connect() {
 
             webSocket = new WebSocket(this.hostUri);
-            webSocket.WaitTime = new TimeSpan(0, 0, 3);
+            webSocket.WaitTime = new TimeSpan(0, 0, 1);
             webSocket.Compression = CompressionMethod.Deflate;
 
             webSocket.OnOpen += (sender, e) => {
-                Debug.Log("SocketIO Connected " + sender.ToString() + " " + e.ToString());
+                Debug.Log("SocketIO Connected " + sender.ToString() + " " + e.ToString() + " " + webSocket.Protocol + " " + webSocket.Extensions);
             };
 
             webSocket.OnClose += (sender, e) => {
                 Debug.LogError("SocketIO Disconnected " + sender.ToString() + " " + e.Reason);
                 
-                if (this.closing == false) {
+                if (this.closing == false && GameManager.GetInstance(player_number) != null) {
                     webSocket.Connect();
                 }
             };

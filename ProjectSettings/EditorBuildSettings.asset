@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/two_player.unity
+    guid: 273b9d139158bf547817daf54dfb4bc6
   m_configObjects: {}
