@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,6 +24,7 @@ namespace PUDM
             this.player_number = player_number;
 
             this.hostUri = "ws://" + hostUri + "/socket.io/?EIO=2&transport=websocket";
+
             Connect();
         }
 
@@ -31,7 +32,6 @@ namespace PUDM
 
             webSocket = new WebSocket(this.hostUri);
             webSocket.WaitTime = new TimeSpan(0, 0, 1);
-            webSocket.Compression = CompressionMethod.Deflate;
 
             webSocket.OnOpen += (sender, e) => {
                 Debug.Log("SocketIO Connected " + sender.ToString() + " " + e.ToString() + " " + webSocket.Protocol + " " + webSocket.Extensions);
@@ -64,8 +64,7 @@ namespace PUDM
 
                 if (data.Contains("42[\"action\""))
                 {
-                    Debug.Log(data);
-                    
+                    //Debug.Log(data);
                     
                     data = data.Remove(0, 12);
 
