@@ -67,7 +67,10 @@ public class CameraGrabber : MonoBehaviour
         }
 
         byte[] bytes = screenShot.EncodeToJPG();
-        GameManager.GetInstance(player).SendUpdate(bytes);
+        var isntance = GameManager.GetInstance(player);
+        if (isntance != null) { 
+            GameManager.GetInstance(player).SendUpdate(bytes);
+        }
         Destroy(screenShot);
     }
 
