@@ -28,8 +28,14 @@ namespace PUDM.DataObjects
             this.initialRotation= gameObject.transform.rotation.eulerAngles.x;
         }
 
-        private void UpdateCurrentPosition() {
-            this.currentPosition = initialPosition - gameObject.transform.position.z * -1;
+        private void UpdateCurrentPosition(GameObject referencePoint) {
+
+            var position = initialPosition - gameObject.transform.position.z;
+            
+            if (referencePoint.transform.position.z < this.initialPosition)
+                position *= -1;
+
+            this.currentPosition = position;
         }
 
         private void UpdateRotation() {
@@ -40,8 +46,8 @@ namespace PUDM.DataObjects
                 );
         }
 
-        public void Update() {
-            UpdateCurrentPosition();
+        public void Update(GameObject referencePoint) {
+            UpdateCurrentPosition(referencePoint);
             UpdateRotation();
         }
 

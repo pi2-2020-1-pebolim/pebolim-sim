@@ -1,4 +1,4 @@
-using PUDM;
+﻿using PUDM;
 using PUDM.DataObjects;
 using PUDM.Events;
 using System.Collections.Generic;
@@ -108,7 +108,7 @@ public class GameManager : MonoBehaviour
     void updateLaneInformation() {
     
         foreach(var lane in this.lanesState) {
-            lane.Update();
+            lane.Update(this.referencePoint);
         }
     }
 
