@@ -1,8 +1,9 @@
-﻿using PUDM;
+using PUDM;
 using PUDM.DataObjects;
 using PUDM.Events;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -34,6 +35,7 @@ public class GameManager : MonoBehaviour
     List<PUDM.DataObjects.LaneUpdate> lanesState;
 
     public bool delayEmit = false;
+    public bool localOnly = false;
 
     [SerializeField]
     private MovementManager movementManager;
@@ -46,11 +48,14 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        if (instances[player_number] is null) {
+        if (instances[player_number] != null) {
+            var old_reference = instances[player_number];
             instances[player_number] = this;
+            Destroy(old_reference.gameObject);
         } else {
-            Destroy(this.gameObject);
+            instances[player_number] = this;
         }
+
 
         lanesDefinition = CreateLanesDefinition();
         var field = new FieldDefinition(
@@ -61,10 +66,15 @@ public class GameManager : MonoBehaviour
 
         var cameraSettings = captureCamera.GetComponent<CameraGrabber>().GetCameraSettings();
 
-        this.pudmClient = new PUDMClient(this.hostUri, field, cameraSettings, this.player_number);
-
         this.lanesState = CreateLaneUpdateList(lanesDefinition);
 
+        if (localOnly == false) {
+            this.pudmClient = new PUDMClient(this.hostUri, field, cameraSettings, this.player_number);
+           
+        } else {
+            movementManager = GetComponent<JsonGenerate>();
+        }
+       
         Application.targetFrameRate = 60;
     }
 
@@ -124,7 +134,27 @@ public class GameManager : MonoBehaviour
         }
 
         if (Input.GetKeyUp(KeyCode.M)) {
-            mockMovementManager = (mockMovementManager == null) ? GetComponent<JsonGenerate>() : null;
+            if (localOnly == false)
+                mockMovementManager = (mockMovementManager == null) ? GetComponent<JsonGenerate>() : null;
+        }
+
+        if (this.player_number == 0) {
+
+            if (Input.GetKeyUp(KeyCode.Alpha1)){
+                SceneManager.LoadScene(0, LoadSceneMode.Single);
+            }
+
+            if (Input.GetKeyUp(KeyCode.Alpha2)) {
+                SceneManager.LoadScene(1, LoadSceneMode.Single);
+            }
+
+            if (Input.GetKeyUp(KeyCode.Alpha3)) {
+                SceneManager.LoadScene(2, LoadSceneMode.Single);
+            }
+
+            if (Input.GetKeyUp(KeyCode.Alpha4)) {
+                SceneManager.LoadScene(3, LoadSceneMode.Single);
+            }
         }
 
     }
@@ -142,6 +172,9 @@ public class GameManager : MonoBehaviour
     }
 
     public void SendUpdate(byte[] image) {
+        
+        if (localOnly) return;
+
         pudmClient.SendUpdate(image, lanesState);
     }
 
