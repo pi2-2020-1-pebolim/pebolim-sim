@@ -70,7 +70,11 @@ public class MotorMove : MonoBehaviour
         if (lastTimestamp != timestamp) {
             currentState = MotorState.Moving;
     
-            targetPosition = initialPosition.z + state.position;
+            if (this.player_number == 0) {
+                targetPosition = initialPosition.z + state.position;
+            } else {
+                targetPosition = initialPosition.z - state.position;
+            }
             targetPosition = calculateLimit(currentPosition, targetPosition);
         }
 
