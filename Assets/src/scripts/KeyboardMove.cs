@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class KeyboardMove : MonoBehaviour
 {
@@ -15,6 +16,9 @@ public class KeyboardMove : MonoBehaviour
 
     [SerializeField]
     private Vector3 velocity_threshold;
+
+    [SerializeField]
+    private bool eternalMovement;
 
     HashSet<Collision> kickerCollisions;
 
@@ -40,7 +44,11 @@ public class KeyboardMove : MonoBehaviour
 
         rigidbody.AddForce(movementNormal);
 
-        if (movementNormal == Vector3.zero) {
+        if (Input.GetKeyUp(KeyCode.G)) {
+            eternalMovement = !eternalMovement;
+        }
+
+        if (movementNormal == Vector3.zero && eternalMovement) {
             if (
                 Mathf.Abs(velocity.x) < velocity_threshold.x
                 && Mathf.Abs(velocity.z) < velocity_threshold.z
