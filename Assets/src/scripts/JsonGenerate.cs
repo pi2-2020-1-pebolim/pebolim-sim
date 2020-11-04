@@ -26,7 +26,7 @@ public class JsonGenerate : MovementManager
             var desiredState = new DesiredState {
                 laneID = i,
                 position = Random.Range(positionRange.x, positionRange.y),
-                kick = false
+                kick = Random.Range(0, 2) == 1 ? true : false
             };
 
             SetState(desiredState, currentTimestamp);
