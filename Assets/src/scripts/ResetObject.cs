@@ -39,7 +39,7 @@ public class ResetObject : MonoBehaviour
         }
     }
 
-    void InitReset() {
+    public void InitReset() {
         
         if (this.rigidbody != null) {
             rigidbody.isKinematic = true;
@@ -49,7 +49,7 @@ public class ResetObject : MonoBehaviour
         transform.position = originalPosition;
     }
 
-    void EndReset() {
+    public void EndReset() {
 
         if (this.rigidbody != null) {
             rigidbody.isKinematic = false;
