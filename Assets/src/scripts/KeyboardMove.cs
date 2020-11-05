@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -77,5 +77,14 @@ public class KeyboardMove : MonoBehaviour
             kickerCollisions.Remove(collision);
         }
 
+    }
+
+    private void OnTriggerEnter(Collider other) {
+
+        var resetHandler = this.GetComponent<ResetObject>();
+        resetHandler.InitReset();
+        resetHandler.EndReset();
+
+        rigidbody.AddForce(-centerFieldPull*2, ForceMode.VelocityChange);
     }
 }
