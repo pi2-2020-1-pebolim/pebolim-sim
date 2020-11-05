@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -16,6 +16,13 @@ public class KeyboardMove : MonoBehaviour
 
     [SerializeField]
     private Vector3 velocity_threshold;
+
+    [SerializeField]
+    Vector3 centerFieldPull;
+    [SerializeField]
+    Vector3 centerFieldPullForce;
+    [SerializeField]
+    ForceMode pullForceType;
 
     [SerializeField]
     private bool eternalMovement;
@@ -44,11 +51,17 @@ public class KeyboardMove : MonoBehaviour
 
         rigidbody.AddForce(movementNormal);
 
+        var target = new Vector3(0, 0, 0);
+        centerFieldPull = target - this.transform.position;
+        centerFieldPull.Scale(centerFieldPullForce * Time.deltaTime);
+        
+        rigidbody.AddForce(centerFieldPull, pullForceType);
+
         if (Input.GetKeyUp(KeyCode.G)) {
             eternalMovement = !eternalMovement;
         }
 
-        if (movementNormal == Vector3.zero && eternalMovement) {
+        if (eternalMovement) {
             if (
                 Mathf.Abs(velocity.x) < velocity_threshold.x
                 && Mathf.Abs(velocity.z) < velocity_threshold.z
